@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { getStocks } from "@/lib/market-data";
 import { StockQuote } from "@/lib/types";
 
-export default function MarketMovers() {
+interface Props {
+  onSelectSymbol?: (symbol: string) => void;
+}
+
+export default function MarketMovers({ onSelectSymbol }: Props) {
   const [stocks, setStocks] = useState<StockQuote[]>([]);
 
   useEffect(() => {
@@ -23,15 +27,14 @@ export default function MarketMovers() {
       {items.map((s) => (
         <div
           key={s.symbol}
-          className="flex items-center justify-between py-1 text-xs border-b border-[var(--bb-border)]"
+          className={`flex items-center justify-between py-1 text-xs border-b border-[var(--bb-border)] ${
+            onSelectSymbol ? "cursor-pointer hover:bg-[#1a1a1a]" : ""
+          } transition-colors`}
+          onClick={() => onSelectSymbol?.(s.symbol)}
         >
           <span className="font-bold text-[var(--bb-blue)]">{s.symbol}</span>
           <span className="font-mono">{s.price.toFixed(2)}</span>
-          <span
-            className={`font-mono text-[10px] font-bold ${
-              s.changePercent >= 0 ? "gain" : "loss"
-            }`}
-          >
+          <span className={`font-mono text-[10px] font-bold ${s.changePercent >= 0 ? "gain" : "loss"}`}>
             {s.changePercent >= 0 ? "+" : ""}
             {s.changePercent.toFixed(2)}%
           </span>

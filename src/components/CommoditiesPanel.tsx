@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { getCommodities } from "@/lib/market-data";
 import { CommodityQuote } from "@/lib/types";
 
-export default function CommoditiesPanel() {
+interface Props {
+  onViewAll?: () => void;
+}
+
+export default function CommoditiesPanel({ onViewAll }: Props) {
   const [commodities, setCommodities] = useState<CommodityQuote[]>([]);
 
   useEffect(() => {
@@ -17,6 +21,14 @@ export default function CommoditiesPanel() {
     <div className="panel">
       <div className="panel-header">
         <span>Commodities</span>
+        {onViewAll && (
+          <button
+            onClick={onViewAll}
+            className="text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] transition-colors"
+          >
+            View All →
+          </button>
+        )}
       </div>
       <div className="overflow-auto">
         <table className="w-full text-xs">
@@ -29,7 +41,11 @@ export default function CommoditiesPanel() {
           </thead>
           <tbody>
             {commodities.map((c) => (
-              <tr key={c.symbol} className="border-b border-[var(--bb-border)] hover:bg-[#1a1a1a]">
+              <tr
+                key={c.symbol}
+                className="border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                onClick={onViewAll}
+              >
                 <td className="py-2 px-3">
                   <span className="font-bold text-[var(--bb-text)]">{c.name}</span>
                 </td>

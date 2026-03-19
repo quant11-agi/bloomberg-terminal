@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { getCurrencies } from "@/lib/market-data";
 import { CurrencyPair } from "@/lib/types";
 
-export default function ForexPanel() {
+interface Props {
+  onViewAll?: () => void;
+}
+
+export default function ForexPanel({ onViewAll }: Props) {
   const [currencies, setCurrencies] = useState<CurrencyPair[]>([]);
 
   useEffect(() => {
@@ -17,6 +21,14 @@ export default function ForexPanel() {
     <div className="panel">
       <div className="panel-header">
         <span>Forex & Crypto</span>
+        {onViewAll && (
+          <button
+            onClick={onViewAll}
+            className="text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] transition-colors"
+          >
+            View All →
+          </button>
+        )}
       </div>
       <div className="overflow-auto max-h-[300px]">
         <table className="w-full text-xs">
@@ -29,7 +41,11 @@ export default function ForexPanel() {
           </thead>
           <tbody>
             {currencies.map((c) => (
-              <tr key={c.pair} className="border-b border-[var(--bb-border)] hover:bg-[#1a1a1a]">
+              <tr
+                key={c.pair}
+                className="border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                onClick={onViewAll}
+              >
                 <td className="py-2 px-3 font-bold text-[var(--bb-yellow)]">{c.pair}</td>
                 <td className="text-right py-2 px-3 font-mono">
                   {c.rate > 1000 ? c.rate.toLocaleString(undefined, { maximumFractionDigits: 2 }) : c.rate.toFixed(4)}

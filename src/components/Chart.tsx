@@ -2,13 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createChart, CandlestickSeries, HistogramSeries, ColorType } from "lightweight-charts";
-import { generateCandles } from "@/lib/market-data";
-import { getStocks } from "@/lib/market-data";
+import { generateCandles, getStocks } from "@/lib/market-data";
+
+const TIMEFRAMES = [
+  { label: "1W", days: 7 },
+  { label: "1M", days: 30 },
+  { label: "3M", days: 90 },
+  { label: "6M", days: 180 },
+  { label: "1Y", days: 365 },
+];
 
 export default function Chart({ symbol }: { symbol: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
   const [stock, setStock] = useState(() => getStocks().find((s) => s.symbol === symbol));
+  const [activeTf, setActiveTf] = useState(2); // 3M default
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -20,7 +28,6 @@ export default function Chart({ symbol }: { symbol: string }) {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Clear previous chart
     if (chartRef.current) {
       chartRef.current.remove();
       chartRef.current = null;
@@ -41,20 +48,15 @@ export default function Chart({ symbol }: { symbol: string }) {
         vertLine: { color: "#ff8c00", width: 1, style: 2 },
         horzLine: { color: "#ff8c00", width: 1, style: 2 },
       },
-      timeScale: {
-        borderColor: "#2a2a2a",
-        timeVisible: false,
-      },
-      rightPriceScale: {
-        borderColor: "#2a2a2a",
-      },
+      timeScale: { borderColor: "#2a2a2a", timeVisible: false },
+      rightPriceScale: { borderColor: "#2a2a2a" },
       width: containerRef.current.clientWidth,
       height: 350,
     });
 
     chartRef.current = chart;
 
-    const candles = generateCandles(symbol);
+    const candles = generateCandles(symbol, TIMEFRAMES[activeTf].days);
 
     const candleSeries = chart.addSeries(CandlestickSeries, {
       upColor: "#00d26a",
@@ -66,7 +68,6 @@ export default function Chart({ symbol }: { symbol: string }) {
     });
     candleSeries.setData(candles as any);
 
-    // Volume histogram
     const volumeSeries = chart.addSeries(HistogramSeries, {
       priceFormat: { type: "volume" },
       priceScaleId: "volume",
@@ -98,7 +99,7 @@ export default function Chart({ symbol }: { symbol: string }) {
       chart.remove();
       chartRef.current = null;
     };
-  }, [symbol]);
+  }, [symbol, activeTf]);
 
   return (
     <div className="panel">
@@ -108,16 +109,29 @@ export default function Chart({ symbol }: { symbol: string }) {
           {stock && (
             <>
               <span className="text-[var(--bb-text)] text-sm font-mono">{stock.price.toFixed(2)}</span>
-              <span
-                className={`text-[10px] font-bold ${stock.changePercent >= 0 ? "gain" : "loss"}`}
-              >
+              <span className={`text-[10px] font-bold ${stock.changePercent >= 0 ? "gain" : "loss"}`}>
                 {stock.changePercent >= 0 ? "+" : ""}
                 {stock.changePercent.toFixed(2)}%
               </span>
             </>
           )}
         </div>
-        <span className="text-[10px] text-[var(--bb-muted)]">90D Candlestick</span>
+        {/* Timeframe selector */}
+        <div className="flex items-center gap-0">
+          {TIMEFRAMES.map((tf, i) => (
+            <button
+              key={tf.label}
+              onClick={() => setActiveTf(i)}
+              className={`px-2 py-0.5 text-[10px] font-bold rounded transition-colors ${
+                activeTf === i
+                  ? "bg-[var(--bb-orange)] text-black"
+                  : "text-[var(--bb-muted)] hover:text-[var(--bb-text)]"
+              }`}
+            >
+              {tf.label}
+            </button>
+          ))}
+        </div>
       </div>
       <div ref={containerRef} className="w-full" />
     </div>
