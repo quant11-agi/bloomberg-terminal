@@ -20,13 +20,24 @@ export default function Home() {
 
   // Load watchlist from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("bb-watchlist");
-    if (saved) setWatchlist(JSON.parse(saved));
+    try {
+      const saved = localStorage.getItem("bb-watchlist");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) setWatchlist(parsed);
+      }
+    } catch {
+      // localStorage unavailable or corrupted data — start with empty watchlist
+    }
   }, []);
 
   // Save watchlist to localStorage
   useEffect(() => {
-    localStorage.setItem("bb-watchlist", JSON.stringify(watchlist));
+    try {
+      localStorage.setItem("bb-watchlist", JSON.stringify(watchlist));
+    } catch {
+      // localStorage unavailable — watchlist won't persist
+    }
   }, [watchlist]);
 
   const toggleWatchlist = useCallback((symbol: string) => {

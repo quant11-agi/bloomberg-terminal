@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getStocks } from "@/lib/market-data";
 import { StockQuote } from "@/lib/types";
+import { formatVolume, formatMarketCap } from "@/lib/utils";
 
 interface Props {
   symbol: string;
@@ -25,7 +26,9 @@ export default function StockDetail({ symbol, isWatchlisted, toggleWatchlist }: 
 
   if (!stock) return null;
 
-  const marketCap = stock.price * stock.volume * 0.15; // rough estimate for display
+  const marketCap = stock.sharesOutstanding
+    ? stock.price * stock.sharesOutstanding
+    : stock.price * stock.volume * 50; // fallback estimate if shares data unavailable
 
   return (
     <div className="panel">
@@ -99,15 +102,3 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function formatVolume(v: number): string {
-  if (v >= 1e9) return (v / 1e9).toFixed(1) + "B";
-  if (v >= 1e6) return (v / 1e6).toFixed(1) + "M";
-  if (v >= 1e3) return (v / 1e3).toFixed(1) + "K";
-  return v.toString();
-}
-
-function formatMarketCap(v: number): string {
-  if (v >= 1e12) return "$" + (v / 1e12).toFixed(1) + "T";
-  if (v >= 1e9) return "$" + (v / 1e9).toFixed(1) + "B";
-  return "$" + (v / 1e6).toFixed(0) + "M";
-}

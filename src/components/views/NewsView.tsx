@@ -3,27 +3,9 @@
 import { useEffect, useState } from "react";
 import { getNews } from "@/lib/market-data";
 import { NewsItem } from "@/lib/types";
+import { timeAgo, CATEGORY_COLORS } from "@/lib/utils";
 
 const CATEGORIES = ["all", "technology", "economy", "markets", "commodities", "crypto"];
-
-const CATEGORY_COLORS: Record<string, string> = {
-  technology: "text-[var(--bb-blue)]",
-  economy: "text-[var(--bb-yellow)]",
-  markets: "text-[var(--bb-green)]",
-  commodities: "text-[var(--bb-orange)]",
-  crypto: "text-purple-400",
-  general: "text-[var(--bb-muted)]",
-};
-
-function timeAgo(timestamp: number): string {
-  const seconds = Math.floor((Date.now() - timestamp) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
 
 export default function NewsView() {
   const [news, setNews] = useState<NewsItem[]>([]);

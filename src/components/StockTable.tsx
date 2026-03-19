@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getStocks } from "@/lib/market-data";
 import { StockQuote } from "@/lib/types";
 
@@ -37,19 +37,21 @@ export default function StockTable({
     return () => clearInterval(interval);
   }, []);
 
-  const filtered = searchQuery
-    ? stocks.filter(
-        (s) =>
-          s.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : stocks;
+  const sorted = useMemo(() => {
+    const filtered = searchQuery
+      ? stocks.filter(
+          (s) =>
+            s.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            s.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : stocks;
 
-  const sorted = [...filtered].sort((a, b) => {
-    const mul = sortDir === "desc" ? -1 : 1;
-    if (sortKey === "symbol") return mul * a.symbol.localeCompare(b.symbol);
-    return mul * ((a[sortKey] as number) - (b[sortKey] as number));
-  });
+    return [...filtered].sort((a, b) => {
+      const mul = sortDir === "desc" ? -1 : 1;
+      if (sortKey === "symbol") return mul * a.symbol.localeCompare(b.symbol);
+      return mul * ((a[sortKey] as number) - (b[sortKey] as number));
+    });
+  }, [stocks, searchQuery, sortKey, sortDir]);
 
   const handleSort = (key: typeof sortKey) => {
     if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -66,7 +68,7 @@ export default function StockTable({
       <div className="panel-header">
         <span>Top Equities</span>
         <span className="text-[10px] text-[var(--bb-muted)]">
-          {filtered.length} symbols
+          {sorted.length} symbols
           {searchQuery && ` matching "${searchQuery}"`}
         </span>
       </div>

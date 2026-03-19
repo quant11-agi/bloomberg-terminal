@@ -18,6 +18,7 @@ export interface StockQuote {
   low: number;
   open: number;
   prevPrice?: number;
+  sharesOutstanding?: number;
 }
 
 export interface NewsItem {

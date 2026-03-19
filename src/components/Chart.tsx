@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createChart, CandlestickSeries, HistogramSeries, ColorType } from "lightweight-charts";
+import { createChart, CandlestickSeries, HistogramSeries, ColorType, CandlestickData, HistogramData, Time } from "lightweight-charts";
 import { generateCandles, getStocks } from "@/lib/market-data";
 
 const TIMEFRAMES = [
@@ -66,7 +66,7 @@ export default function Chart({ symbol }: { symbol: string }) {
       wickDownColor: "#ff3b3b",
       wickUpColor: "#00d26a",
     });
-    candleSeries.setData(candles as any);
+    candleSeries.setData(candles as CandlestickData<Time>[]);
 
     const volumeSeries = chart.addSeries(HistogramSeries, {
       priceFormat: { type: "volume" },
@@ -79,10 +79,10 @@ export default function Chart({ symbol }: { symbol: string }) {
 
     volumeSeries.setData(
       candles.map((c) => ({
-        time: c.time,
+        time: c.time as Time,
         value: Math.floor(Math.random() * 50000000) + 10000000,
         color: c.close >= c.open ? "rgba(0,210,106,0.3)" : "rgba(255,59,59,0.3)",
-      })) as any
+      })) as HistogramData<Time>[]
     );
 
     chart.timeScale().fitContent();

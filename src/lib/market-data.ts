@@ -40,21 +40,21 @@ const BASE_INDICES: MarketIndex[] = [
 ];
 
 const BASE_STOCKS: StockQuote[] = [
-  { symbol: "AAPL", name: "Apple Inc", price: 237.45, change: 3.21, changePercent: 1.37, volume: 54230000, high: 238.90, low: 234.10, open: 235.00 },
-  { symbol: "MSFT", name: "Microsoft Corp", price: 452.18, change: -2.45, changePercent: -0.54, volume: 23450000, high: 455.30, low: 450.20, open: 454.00 },
-  { symbol: "GOOGL", name: "Alphabet Inc", price: 178.92, change: 1.56, changePercent: 0.88, volume: 18760000, high: 179.80, low: 176.50, open: 177.00 },
-  { symbol: "AMZN", name: "Amazon.com", price: 214.67, change: 4.32, changePercent: 2.06, volume: 42310000, high: 215.40, low: 210.10, open: 211.00 },
-  { symbol: "NVDA", name: "NVIDIA Corp", price: 142.56, change: 5.78, changePercent: 4.23, volume: 312450000, high: 143.90, low: 136.20, open: 137.50 },
-  { symbol: "META", name: "Meta Platforms", price: 612.34, change: -8.12, changePercent: -1.31, volume: 15670000, high: 620.50, low: 608.90, open: 619.00 },
-  { symbol: "TSLA", name: "Tesla Inc", price: 342.89, change: 12.45, changePercent: 3.77, volume: 87650000, high: 345.20, low: 328.50, open: 330.00 },
-  { symbol: "BRK.B", name: "Berkshire B", price: 478.23, change: 1.89, changePercent: 0.40, volume: 3240000, high: 479.50, low: 475.60, open: 476.00 },
-  { symbol: "JPM", name: "JPMorgan Chase", price: 234.56, change: -1.23, changePercent: -0.52, volume: 8970000, high: 236.40, low: 233.10, open: 235.50 },
-  { symbol: "V", name: "Visa Inc", price: 298.45, change: 2.34, changePercent: 0.79, volume: 5430000, high: 299.80, low: 295.60, open: 296.00 },
-  { symbol: "UNH", name: "UnitedHealth", price: 534.12, change: -4.56, changePercent: -0.85, volume: 4120000, high: 539.80, low: 532.50, open: 538.00 },
-  { symbol: "XOM", name: "Exxon Mobil", price: 108.34, change: 0.67, changePercent: 0.62, volume: 12340000, high: 109.20, low: 107.50, open: 107.80 },
-  { symbol: "LLY", name: "Eli Lilly", price: 812.45, change: 15.67, changePercent: 1.97, volume: 6780000, high: 815.30, low: 795.40, open: 798.00 },
-  { symbol: "AVGO", name: "Broadcom", price: 187.23, change: 3.45, changePercent: 1.88, volume: 24560000, high: 188.50, low: 183.20, open: 184.00 },
-  { symbol: "WMT", name: "Walmart", price: 92.34, change: 0.45, changePercent: 0.49, volume: 7890000, high: 92.80, low: 91.50, open: 91.90 },
+  { symbol: "AAPL", name: "Apple Inc", price: 237.45, change: 3.21, changePercent: 1.37, volume: 54230000, high: 238.90, low: 234.10, open: 235.00, sharesOutstanding: 15.33e9 },
+  { symbol: "MSFT", name: "Microsoft Corp", price: 452.18, change: -2.45, changePercent: -0.54, volume: 23450000, high: 455.30, low: 450.20, open: 454.00, sharesOutstanding: 7.43e9 },
+  { symbol: "GOOGL", name: "Alphabet Inc", price: 178.92, change: 1.56, changePercent: 0.88, volume: 18760000, high: 179.80, low: 176.50, open: 177.00, sharesOutstanding: 12.2e9 },
+  { symbol: "AMZN", name: "Amazon.com", price: 214.67, change: 4.32, changePercent: 2.06, volume: 42310000, high: 215.40, low: 210.10, open: 211.00, sharesOutstanding: 10.5e9 },
+  { symbol: "NVDA", name: "NVIDIA Corp", price: 142.56, change: 5.78, changePercent: 4.23, volume: 312450000, high: 143.90, low: 136.20, open: 137.50, sharesOutstanding: 24.6e9 },
+  { symbol: "META", name: "Meta Platforms", price: 612.34, change: -8.12, changePercent: -1.31, volume: 15670000, high: 620.50, low: 608.90, open: 619.00, sharesOutstanding: 2.57e9 },
+  { symbol: "TSLA", name: "Tesla Inc", price: 342.89, change: 12.45, changePercent: 3.77, volume: 87650000, high: 345.20, low: 328.50, open: 330.00, sharesOutstanding: 3.21e9 },
+  { symbol: "BRK.B", name: "Berkshire B", price: 478.23, change: 1.89, changePercent: 0.40, volume: 3240000, high: 479.50, low: 475.60, open: 476.00, sharesOutstanding: 1.3e9 },
+  { symbol: "JPM", name: "JPMorgan Chase", price: 234.56, change: -1.23, changePercent: -0.52, volume: 8970000, high: 236.40, low: 233.10, open: 235.50, sharesOutstanding: 2.87e9 },
+  { symbol: "V", name: "Visa Inc", price: 298.45, change: 2.34, changePercent: 0.79, volume: 5430000, high: 299.80, low: 295.60, open: 296.00, sharesOutstanding: 2.01e9 },
+  { symbol: "UNH", name: "UnitedHealth", price: 534.12, change: -4.56, changePercent: -0.85, volume: 4120000, high: 539.80, low: 532.50, open: 538.00, sharesOutstanding: 0.92e9 },
+  { symbol: "XOM", name: "Exxon Mobil", price: 108.34, change: 0.67, changePercent: 0.62, volume: 12340000, high: 109.20, low: 107.50, open: 107.80, sharesOutstanding: 4.19e9 },
+  { symbol: "LLY", name: "Eli Lilly", price: 812.45, change: 15.67, changePercent: 1.97, volume: 6780000, high: 815.30, low: 795.40, open: 798.00, sharesOutstanding: 0.95e9 },
+  { symbol: "AVGO", name: "Broadcom", price: 187.23, change: 3.45, changePercent: 1.88, volume: 24560000, high: 188.50, low: 183.20, open: 184.00, sharesOutstanding: 4.64e9 },
+  { symbol: "WMT", name: "Walmart", price: 92.34, change: 0.45, changePercent: 0.49, volume: 7890000, high: 92.80, low: 91.50, open: 91.90, sharesOutstanding: 8.05e9 },
 ];
 
 const BASE_CURRENCIES: CurrencyPair[] = [
@@ -99,8 +99,9 @@ function jitter(value: number, maxPct: number = 0.002): number {
 export function getIndices(): MarketIndex[] {
   return BASE_INDICES.map((idx) => {
     const price = jitter(idx.price);
-    const change = +(price - (idx.price - idx.change)).toFixed(2);
-    const changePercent = +((change / (price - change)) * 100).toFixed(2);
+    const prevClose = idx.price - idx.change;
+    const change = +(price - prevClose).toFixed(2);
+    const changePercent = prevClose !== 0 ? +((change / prevClose) * 100).toFixed(2) : 0;
     return { ...idx, price, change, changePercent };
   });
 }
@@ -134,7 +135,8 @@ export function getCommodities(): CommodityQuote[] {
   return BASE_COMMODITIES.map((c) => {
     const price = jitter(c.price);
     const change = +(c.change + (Math.random() - 0.5) * 0.5).toFixed(2);
-    const changePercent = +((change / (price - change)) * 100).toFixed(2);
+    const prevPrice = price - change;
+    const changePercent = prevPrice !== 0 ? +((change / prevPrice) * 100).toFixed(2) : 0;
     return { ...c, price, change, changePercent };
   });
 }

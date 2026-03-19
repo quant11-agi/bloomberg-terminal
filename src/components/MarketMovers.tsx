@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getStocks } from "@/lib/market-data";
 import { StockQuote } from "@/lib/types";
 
@@ -17,9 +17,11 @@ export default function MarketMovers({ onSelectSymbol }: Props) {
     return () => clearInterval(interval);
   }, []);
 
-  const gainers = [...stocks].sort((a, b) => b.changePercent - a.changePercent).slice(0, 5);
-  const losers = [...stocks].sort((a, b) => a.changePercent - b.changePercent).slice(0, 5);
-  const mostActive = [...stocks].sort((a, b) => b.volume - a.volume).slice(0, 5);
+  const { gainers, losers, mostActive } = useMemo(() => ({
+    gainers: [...stocks].sort((a, b) => b.changePercent - a.changePercent).slice(0, 5),
+    losers: [...stocks].sort((a, b) => a.changePercent - b.changePercent).slice(0, 5),
+    mostActive: [...stocks].sort((a, b) => b.volume - a.volume).slice(0, 5),
+  }), [stocks]);
 
   const MoverList = ({ title, items, color }: { title: string; items: StockQuote[]; color: string }) => (
     <div>
