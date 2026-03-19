@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --bb-orange: #ff8c00;
+  --bb-green: #00d26a;
+  --bb-red: #ff3b3b;
+  --bb-blue: #1e90ff;
+  --bb-yellow: #ffd700;
+  --bb-dark: #0a0a0a;
+  --bb-panel: #111111;
+  --bb-border: #2a2a2a;
+  --bb-text: #e0e0e0;
+  --bb-muted: #888888;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bb-dark);
+  color: var(--bb-text);
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bb-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bb-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bb-muted);
+}
+
+/* Ticker animation */
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-animate {
+  animation: ticker-scroll 30s linear infinite;
+}
+
+.ticker-animate:hover {
+  animation-play-state: paused;
+}
+
+/* Blinking dot for live indicator */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.live-dot {
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+/* Panel styling */
+.panel {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.panel-header {
+  background: #1a1a1a;
+  border-bottom: 1px solid var(--bb-border);
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bb-orange);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Gain/loss colors */
+.gain { color: var(--bb-green); }
+.loss { color: var(--bb-red); }
+
+/* Flash animation for price updates */
+@keyframes flash-green {
+  0% { background: rgba(0, 210, 106, 0.3); }
+  100% { background: transparent; }
+}
+@keyframes flash-red {
+  0% { background: rgba(255, 59, 59, 0.3); }
+  100% { background: transparent; }
+}
+.flash-gain { animation: flash-green 0.6s ease-out; }
+.flash-loss { animation: flash-red 0.6s ease-out; }
