@@ -1,6 +1,6 @@
 "use client";
 
-import { ViewType } from "@/app/page";
+import { useApp } from "@/lib/context";
 import MarketOverview from "@/components/MarketOverview";
 import StockTable from "@/components/StockTable";
 import Chart from "@/components/Chart";
@@ -10,23 +10,9 @@ import CommoditiesPanel from "@/components/CommoditiesPanel";
 import SectorHeatmap from "@/components/SectorHeatmap";
 import MarketMovers from "@/components/MarketMovers";
 
-interface Props {
-  selectedSymbol: string;
-  setSelectedSymbol: (s: string) => void;
-  searchQuery: string;
-  watchlist: string[];
-  toggleWatchlist: (s: string) => void;
-  setActiveView: (v: ViewType) => void;
-}
+export default function DashboardView() {
+  const { selectedSymbol, setSelectedSymbol, searchQuery, watchlist, toggleWatchlist, setActiveView } = useApp();
 
-export default function DashboardView({
-  selectedSymbol,
-  setSelectedSymbol,
-  searchQuery,
-  watchlist,
-  toggleWatchlist,
-  setActiveView,
-}: Props) {
   return (
     <div className="p-2 gap-2 grid grid-cols-1 lg:grid-cols-12 auto-rows-min">
       {/* Left column */}

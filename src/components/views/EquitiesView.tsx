@@ -1,25 +1,14 @@
 "use client";
 
+import { useApp } from "@/lib/context";
 import Chart from "@/components/Chart";
 import StockTable from "@/components/StockTable";
 import MarketMovers from "@/components/MarketMovers";
 import StockDetail from "@/components/StockDetail";
 
-interface Props {
-  selectedSymbol: string;
-  setSelectedSymbol: (s: string) => void;
-  searchQuery: string;
-  watchlist: string[];
-  toggleWatchlist: (s: string) => void;
-}
+export default function EquitiesView() {
+  const { selectedSymbol, setSelectedSymbol, searchQuery, watchlist, toggleWatchlist } = useApp();
 
-export default function EquitiesView({
-  selectedSymbol,
-  setSelectedSymbol,
-  searchQuery,
-  watchlist,
-  toggleWatchlist,
-}: Props) {
   return (
     <div className="p-2 gap-2 grid grid-cols-1 lg:grid-cols-12 auto-rows-min">
       {/* Left: full stock table */}

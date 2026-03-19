@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ViewType } from "@/app/page";
+import { useApp, type ViewType } from "@/lib/context";
 
 const NAV_ITEMS: { key: ViewType; label: string }[] = [
   { key: "dashboard", label: "Dashboard" },
@@ -12,21 +12,8 @@ const NAV_ITEMS: { key: ViewType; label: string }[] = [
   { key: "watchlist", label: "Watchlist" },
 ];
 
-interface HeaderProps {
-  activeView: ViewType;
-  setActiveView: (view: ViewType) => void;
-  searchQuery: string;
-  setSearchQuery: (q: string) => void;
-  watchlistCount: number;
-}
-
-export default function Header({
-  activeView,
-  setActiveView,
-  searchQuery,
-  setSearchQuery,
-  watchlistCount,
-}: HeaderProps) {
+export default function Header() {
+  const { activeView, setActiveView, searchQuery, setSearchQuery, watchlist } = useApp();
   const [time, setTime] = useState("");
 
   useEffect(() => {
@@ -51,17 +38,18 @@ export default function Header({
   }, []);
 
   return (
-    <header className="bg-[#0a0a0a] border-b border-[var(--bb-border)]">
+    <header className="bg-[#0a0a0a] border-b border-[var(--bb-border)]" role="banner">
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setActiveView("dashboard")}
             className="text-[var(--bb-orange)] font-bold text-lg tracking-wider hover:opacity-80 transition-opacity"
+            aria-label="Go to dashboard"
           >
             BLOOMBERG<span className="text-[var(--bb-text)]">TERMINAL</span>
           </button>
           <div className="flex items-center gap-1.5 ml-2">
-            <span className="live-dot w-2 h-2 rounded-full bg-[var(--bb-green)] inline-block" />
+            <span className="live-dot w-2 h-2 rounded-full bg-[var(--bb-green)] inline-block" aria-hidden="true" />
             <span className="text-[10px] text-[var(--bb-green)] uppercase tracking-wider">
               Live
             </span>
@@ -70,6 +58,7 @@ export default function Header({
 
         {/* Search bar */}
         <div className="hidden md:flex items-center relative">
+          <label htmlFor="bb-search" className="sr-only">Search symbols</label>
           <input
             id="bb-search"
             type="text"
@@ -82,17 +71,20 @@ export default function Header({
             <button
               onClick={() => setSearchQuery("")}
               className="absolute right-2 text-[var(--bb-muted)] hover:text-[var(--bb-text)] text-xs"
+              aria-label="Clear search"
             >
               ×
             </button>
           )}
         </div>
 
-        <div className="text-xs text-[var(--bb-muted)] font-mono">{time}</div>
+        <time className="text-xs text-[var(--bb-muted)] font-mono" dateTime={new Date().toISOString()}>
+          {time}
+        </time>
       </div>
 
       {/* Navigation tabs */}
-      <nav className="flex items-center gap-0 px-4 border-t border-[var(--bb-border)]">
+      <nav className="flex items-center gap-0 px-4 border-t border-[var(--bb-border)]" aria-label="Main navigation">
         {NAV_ITEMS.map((item) => (
           <button
             key={item.key}
@@ -102,15 +94,16 @@ export default function Header({
                 ? "text-[var(--bb-orange)]"
                 : "text-[var(--bb-muted)] hover:text-[var(--bb-text)]"
             }`}
+            aria-current={activeView === item.key ? "page" : undefined}
           >
             {item.label}
-            {item.key === "watchlist" && watchlistCount > 0 && (
+            {item.key === "watchlist" && watchlist.length > 0 && (
               <span className="ml-1 bg-[var(--bb-orange)] text-black text-[9px] px-1 rounded-full font-bold">
-                {watchlistCount}
+                {watchlist.length}
               </span>
             )}
             {activeView === item.key && (
-              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--bb-orange)]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--bb-orange)]" aria-hidden="true" />
             )}
           </button>
         ))}

@@ -45,6 +45,7 @@ export default function StockDetail({ symbol, isWatchlisted, toggleWatchlist }: 
               : "text-[var(--bb-muted)] hover:text-[var(--bb-orange)]"
           }`}
           title={isWatchlisted ? "Remove from watchlist" : "Add to watchlist"}
+          aria-label={isWatchlisted ? `Remove ${stock.symbol} from watchlist` : `Add ${stock.symbol} to watchlist`}
         >
           {isWatchlisted ? "★" : "☆"}
         </button>
@@ -66,7 +67,7 @@ export default function StockDetail({ symbol, isWatchlisted, toggleWatchlist }: 
           <Stat label="Day Range" value={`${stock.low.toFixed(2)} - ${stock.high.toFixed(2)}`} />
           <Stat label="Mkt Cap" value={formatMarketCap(marketCap)} />
           <Stat label="Avg Vol" value={formatVolume(stock.volume * 0.9)} />
-          <Stat label="P/E" value={(15 + Math.random() * 30).toFixed(1)} />
+          <Stat label="P/E" value={stock.pe ? stock.pe.toFixed(1) : "N/A"} />
         </div>
         {/* Price range bar */}
         <div className="mt-3">

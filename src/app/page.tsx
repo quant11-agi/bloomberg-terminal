@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { AppProvider, useApp } from "@/lib/context";
 import Header from "@/components/Header";
 import TickerTape from "@/components/TickerTape";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardView from "@/components/views/DashboardView";
 import EquitiesView from "@/components/views/EquitiesView";
 import ForexView from "@/components/views/ForexView";
@@ -10,88 +11,29 @@ import CommoditiesView from "@/components/views/CommoditiesView";
 import NewsView from "@/components/views/NewsView";
 import WatchlistView from "@/components/views/WatchlistView";
 
-export type ViewType = "dashboard" | "equities" | "forex" | "commodities" | "news" | "watchlist";
-
-export default function Home() {
-  const [activeView, setActiveView] = useState<ViewType>("dashboard");
-  const [selectedSymbol, setSelectedSymbol] = useState("NVDA");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [watchlist, setWatchlist] = useState<string[]>([]);
-
-  // Load watchlist from localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("bb-watchlist");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) setWatchlist(parsed);
-      }
-    } catch {
-      // localStorage unavailable or corrupted data — start with empty watchlist
-    }
-  }, []);
-
-  // Save watchlist to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem("bb-watchlist", JSON.stringify(watchlist));
-    } catch {
-      // localStorage unavailable — watchlist won't persist
-    }
-  }, [watchlist]);
-
-  const toggleWatchlist = useCallback((symbol: string) => {
-    setWatchlist((prev) =>
-      prev.includes(symbol) ? prev.filter((s) => s !== symbol) : [...prev, symbol]
-    );
-  }, []);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setActiveView("dashboard");
-        setSearchQuery("");
-      }
-      if (e.key === "/" && !(e.target instanceof HTMLInputElement)) {
-        e.preventDefault();
-        document.getElementById("bb-search")?.focus();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
-
-  const viewProps = {
-    selectedSymbol,
-    setSelectedSymbol,
-    searchQuery,
-    watchlist,
-    toggleWatchlist,
-    setActiveView,
-  };
+function AppContent() {
+  const { activeView } = useApp();
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header
-        activeView={activeView}
-        setActiveView={setActiveView}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        watchlistCount={watchlist.length}
-      />
+      <Header />
       <TickerTape />
 
-      <main className="flex-1 overflow-auto">
-        {activeView === "dashboard" && <DashboardView {...viewProps} />}
-        {activeView === "equities" && <EquitiesView {...viewProps} />}
-        {activeView === "forex" && <ForexView />}
-        {activeView === "commodities" && <CommoditiesView />}
-        {activeView === "news" && <NewsView />}
-        {activeView === "watchlist" && <WatchlistView {...viewProps} />}
+      <main className="flex-1 overflow-auto" role="main">
+        <ErrorBoundary>
+          {activeView === "dashboard" && <DashboardView />}
+          {activeView === "equities" && <EquitiesView />}
+          {activeView === "forex" && <ForexView />}
+          {activeView === "commodities" && <CommoditiesView />}
+          {activeView === "news" && <NewsView />}
+          {activeView === "watchlist" && <WatchlistView />}
+        </ErrorBoundary>
       </main>
 
-      <footer className="flex items-center justify-between px-4 py-1.5 bg-[#0a0a0a] border-t border-[var(--bb-border)] text-[10px] text-[var(--bb-muted)]">
+      <footer
+        className="flex items-center justify-between px-4 py-1.5 bg-[#0a0a0a] border-t border-[var(--bb-border)] text-[10px] text-[var(--bb-muted)]"
+        role="contentinfo"
+      >
         <div className="flex items-center gap-4">
           <span>Data: Simulated (set NEXT_PUBLIC_FINNHUB_KEY for live)</span>
           <span>•</span>
@@ -101,10 +43,18 @@ export default function Home() {
           <span className="text-[var(--bb-orange)]">ESC Dashboard</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="live-dot w-1.5 h-1.5 rounded-full bg-[var(--bb-green)] inline-block" />
+          <span className="live-dot w-1.5 h-1.5 rounded-full bg-[var(--bb-green)] inline-block" aria-hidden="true" />
           <span>Connected</span>
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }
