@@ -1,19 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getIndices } from "@/lib/market-data";
+import { useCallback } from "react";
+import { fetchIndices } from "@/lib/market-data";
 import { MarketIndex } from "@/lib/types";
+import { useLiveData } from "@/lib/use-live-data";
 
 export default function TickerTape() {
-  const [indices, setIndices] = useState<MarketIndex[]>([]);
+  const fetcher = useCallback(() => fetchIndices(), []);
+  const { data: indices } = useLiveData<MarketIndex[]>(fetcher, 15000);
 
-  useEffect(() => {
-    setIndices(getIndices());
-    const interval = setInterval(() => setIndices(getIndices()), 3000);
-    return () => clearInterval(interval);
-  }, []);
+  if (!indices || indices.length === 0) return null;
 
-  const items = [...indices, ...indices]; // duplicate for seamless loop
+  const items = [...indices, ...indices];
 
   return (
     <div className="w-full overflow-hidden bg-[#0d0d0d] border-b border-[var(--bb-border)]">
@@ -21,7 +19,9 @@ export default function TickerTape() {
         {items.map((idx, i) => (
           <span key={`${idx.symbol}-${i}`} className="inline-flex items-center mx-4 text-xs">
             <span className="font-bold text-[var(--bb-orange)] mr-1.5">{idx.symbol}</span>
-            <span className="text-[var(--bb-text)] mr-1.5">{idx.price.toLocaleString()}</span>
+            <span className="text-[var(--bb-text)] mr-1.5">
+              {idx.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
             <span className={idx.change >= 0 ? "gain" : "loss"}>
               {idx.change >= 0 ? "+" : ""}
               {idx.change.toFixed(2)} ({idx.changePercent >= 0 ? "+" : ""}

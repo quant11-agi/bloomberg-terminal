@@ -1,30 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { createChart, CandlestickSeries, HistogramSeries, ColorType } from "lightweight-charts";
-import { generateCandles, getStocks } from "@/lib/market-data";
+import { fetchChart, fetchQuote, ChartCandle } from "@/lib/market-data";
+import { StockQuote } from "@/lib/types";
 
 const TIMEFRAMES = [
-  { label: "1W", days: 7 },
-  { label: "1M", days: 30 },
-  { label: "3M", days: 90 },
-  { label: "6M", days: 180 },
-  { label: "1Y", days: 365 },
+  { label: "1W", range: "5d" },
+  { label: "1M", range: "1mo" },
+  { label: "3M", range: "3mo" },
+  { label: "6M", range: "6mo" },
+  { label: "1Y", range: "1y" },
 ];
 
 export default function Chart({ symbol }: { symbol: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
-  const [stock, setStock] = useState(() => getStocks().find((s) => s.symbol === symbol));
+  const [stock, setStock] = useState<StockQuote | null>(null);
   const [activeTf, setActiveTf] = useState(2); // 3M default
+  const [loading, setLoading] = useState(true);
 
+  // Fetch quote for header
   useEffect(() => {
-    const interval = setInterval(() => {
-      setStock(getStocks().find((s) => s.symbol === symbol));
-    }, 2500);
+    fetchQuote(symbol).then(setStock);
+    const interval = setInterval(() => fetchQuote(symbol).then(setStock), 15000);
     return () => clearInterval(interval);
   }, [symbol]);
 
+  // Fetch and render chart
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -32,6 +35,8 @@ export default function Chart({ symbol }: { symbol: string }) {
       chartRef.current.remove();
       chartRef.current = null;
     }
+
+    setLoading(true);
 
     const chart = createChart(containerRef.current, {
       layout: {
@@ -56,36 +61,41 @@ export default function Chart({ symbol }: { symbol: string }) {
 
     chartRef.current = chart;
 
-    const candles = generateCandles(symbol, TIMEFRAMES[activeTf].days);
+    fetchChart(symbol, TIMEFRAMES[activeTf].range).then((candles) => {
+      if (!chartRef.current || candles.length === 0) {
+        setLoading(false);
+        return;
+      }
 
-    const candleSeries = chart.addSeries(CandlestickSeries, {
-      upColor: "#00d26a",
-      downColor: "#ff3b3b",
-      borderDownColor: "#ff3b3b",
-      borderUpColor: "#00d26a",
-      wickDownColor: "#ff3b3b",
-      wickUpColor: "#00d26a",
+      const candleSeries = chart.addSeries(CandlestickSeries, {
+        upColor: "#00d26a",
+        downColor: "#ff3b3b",
+        borderDownColor: "#ff3b3b",
+        borderUpColor: "#00d26a",
+        wickDownColor: "#ff3b3b",
+        wickUpColor: "#00d26a",
+      });
+      candleSeries.setData(candles as any);
+
+      // Volume histogram with real data
+      const volumeSeries = chart.addSeries(HistogramSeries, {
+        priceFormat: { type: "volume" },
+        priceScaleId: "volume",
+      });
+      chart.priceScale("volume").applyOptions({
+        scaleMargins: { top: 0.8, bottom: 0 },
+      });
+      volumeSeries.setData(
+        candles.map((c) => ({
+          time: c.time,
+          value: c.volume,
+          color: c.close >= c.open ? "rgba(0,210,106,0.3)" : "rgba(255,59,59,0.3)",
+        })) as any
+      );
+
+      chart.timeScale().fitContent();
+      setLoading(false);
     });
-    candleSeries.setData(candles as any);
-
-    const volumeSeries = chart.addSeries(HistogramSeries, {
-      priceFormat: { type: "volume" },
-      priceScaleId: "volume",
-    });
-
-    chart.priceScale("volume").applyOptions({
-      scaleMargins: { top: 0.8, bottom: 0 },
-    });
-
-    volumeSeries.setData(
-      candles.map((c) => ({
-        time: c.time,
-        value: Math.floor(Math.random() * 50000000) + 10000000,
-        color: c.close >= c.open ? "rgba(0,210,106,0.3)" : "rgba(255,59,59,0.3)",
-      })) as any
-    );
-
-    chart.timeScale().fitContent();
 
     const handleResize = () => {
       if (containerRef.current && chartRef.current) {
@@ -96,8 +106,10 @@ export default function Chart({ symbol }: { symbol: string }) {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      chart.remove();
-      chartRef.current = null;
+      if (chartRef.current) {
+        chart.remove();
+        chartRef.current = null;
+      }
     };
   }, [symbol, activeTf]);
 
@@ -110,24 +122,18 @@ export default function Chart({ symbol }: { symbol: string }) {
             <>
               <span className="text-[var(--bb-text)] text-sm font-mono">{stock.price.toFixed(2)}</span>
               <span className={`text-[10px] font-bold ${stock.changePercent >= 0 ? "gain" : "loss"}`}>
-                {stock.changePercent >= 0 ? "+" : ""}
-                {stock.changePercent.toFixed(2)}%
+                {stock.changePercent >= 0 ? "+" : ""}{stock.changePercent.toFixed(2)}%
               </span>
             </>
           )}
+          {loading && <span className="text-[10px] text-[var(--bb-muted)]">Loading...</span>}
         </div>
-        {/* Timeframe selector */}
         <div className="flex items-center gap-0">
           {TIMEFRAMES.map((tf, i) => (
-            <button
-              key={tf.label}
-              onClick={() => setActiveTf(i)}
+            <button key={tf.label} onClick={() => setActiveTf(i)}
               className={`px-2 py-0.5 text-[10px] font-bold rounded transition-colors ${
-                activeTf === i
-                  ? "bg-[var(--bb-orange)] text-black"
-                  : "text-[var(--bb-muted)] hover:text-[var(--bb-text)]"
-              }`}
-            >
+                activeTf === i ? "bg-[var(--bb-orange)] text-black" : "text-[var(--bb-muted)] hover:text-[var(--bb-text)]"
+              }`}>
               {tf.label}
             </button>
           ))}

@@ -68,6 +68,7 @@ export default function Home() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         watchlistCount={watchlist.length}
+        onSelectSymbol={setSelectedSymbol}
       />
       <TickerTape />
 
@@ -82,9 +83,9 @@ export default function Home() {
 
       <footer className="flex items-center justify-between px-4 py-1.5 bg-[#0a0a0a] border-t border-[var(--bb-border)] text-[10px] text-[var(--bb-muted)]">
         <div className="flex items-center gap-4">
-          <span>Data: Simulated (set NEXT_PUBLIC_FINNHUB_KEY for live)</span>
+          <span>Data: Yahoo Finance (real-time)</span>
           <span>•</span>
-          <span>Refresh: 2-5s</span>
+          <span>Refresh: 15s</span>
           <span>•</span>
           <span className="text-[var(--bb-orange)]">/ Search</span>
           <span className="text-[var(--bb-orange)]">ESC Dashboard</span>

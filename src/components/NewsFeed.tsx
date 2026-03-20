@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getNews } from "@/lib/market-data";
+import { useCallback } from "react";
+import { fetchNews } from "@/lib/market-data";
 import { NewsItem } from "@/lib/types";
+import { useLiveData } from "@/lib/use-live-data";
+import { useState } from "react";
 
 function timeAgo(timestamp: number): string {
   const seconds = Math.floor((Date.now() - timestamp) / 1000);
@@ -29,16 +31,12 @@ interface Props {
 }
 
 export default function NewsFeed({ compact, onViewAll }: Props) {
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const fetcher = useCallback(() => fetchNews(), []);
+  const { data: news, loading } = useLiveData<NewsItem[]>(fetcher, 120000);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  useEffect(() => {
-    getNews().then(setNews);
-    const interval = setInterval(() => getNews().then(setNews), 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const displayNews = compact ? news.slice(0, 8) : news;
+  const allNews = news || [];
+  const displayNews = compact ? allNews.slice(0, 8) : allNews;
 
   return (
     <div className="panel">
@@ -48,12 +46,11 @@ export default function NewsFeed({ compact, onViewAll }: Props) {
           <span className="live-dot w-1.5 h-1.5 rounded-full bg-[var(--bb-red)] inline-block" />
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-[var(--bb-muted)]">{news.length} stories</span>
+          <span className="text-[10px] text-[var(--bb-muted)]">
+            {loading ? "Loading..." : `${allNews.length} stories`}
+          </span>
           {onViewAll && (
-            <button
-              onClick={onViewAll}
-              className="text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] transition-colors"
-            >
+            <button onClick={onViewAll} className="text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] transition-colors">
               View All →
             </button>
           )}
@@ -61,18 +58,12 @@ export default function NewsFeed({ compact, onViewAll }: Props) {
       </div>
       <div className={`overflow-auto ${compact ? "max-h-[500px]" : "max-h-[600px]"}`}>
         {displayNews.map((item) => (
-          <div
-            key={item.id}
+          <div key={item.id}
             className="px-3 py-2.5 border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors"
-            onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}
-          >
-            <h3 className="text-xs font-semibold leading-snug text-[var(--bb-text)]">
-              {item.headline}
-            </h3>
+            onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}>
+            <h3 className="text-xs font-semibold leading-snug text-[var(--bb-text)]">{item.headline}</h3>
             <div className="flex items-center gap-2 mt-1">
-              <span
-                className={`text-[10px] uppercase font-bold ${CATEGORY_COLORS[item.category] || CATEGORY_COLORS.general}`}
-              >
+              <span className={`text-[10px] uppercase font-bold ${CATEGORY_COLORS[item.category] || CATEGORY_COLORS.general}`}>
                 {item.category}
               </span>
               <span className="text-[10px] text-[var(--bb-muted)]">{item.source}</span>
@@ -80,18 +71,28 @@ export default function NewsFeed({ compact, onViewAll }: Props) {
               <span className="text-[10px] text-[var(--bb-muted)]">{timeAgo(item.datetime)}</span>
             </div>
             {expandedId === item.id && (
-              <p className="mt-2 text-[11px] text-[var(--bb-muted)] leading-relaxed border-l-2 border-[var(--bb-orange)] pl-3">
-                {item.summary}
-              </p>
+              <div className="mt-2">
+                <p className="text-[11px] text-[var(--bb-muted)] leading-relaxed border-l-2 border-[var(--bb-orange)] pl-3">
+                  {item.summary}
+                </p>
+                {item.url && item.url !== "#" && (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block mt-1 text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)]">
+                    Read full article →
+                  </a>
+                )}
+              </div>
             )}
           </div>
         ))}
-        {compact && news.length > 8 && onViewAll && (
-          <button
-            onClick={onViewAll}
-            className="w-full py-2 text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] hover:bg-[#1a1a1a] transition-colors"
-          >
-            + {news.length - 8} more stories →
+        {loading && allNews.length === 0 && (
+          <div className="p-4 text-center text-[var(--bb-muted)] text-xs">Loading news...</div>
+        )}
+        {compact && allNews.length > 8 && onViewAll && (
+          <button onClick={onViewAll}
+            className="w-full py-2 text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] hover:bg-[#1a1a1a] transition-colors">
+            + {allNews.length - 8} more stories →
           </button>
         )}
       </div>

@@ -4,7 +4,6 @@ export interface MarketIndex {
   price: number;
   change: number;
   changePercent: number;
-  prevPrice?: number;
 }
 
 export interface StockQuote {
@@ -17,7 +16,8 @@ export interface StockQuote {
   high: number;
   low: number;
   open: number;
-  prevPrice?: number;
+  prevClose?: number;
+  marketCap?: number;
 }
 
 export interface NewsItem {
@@ -28,14 +28,7 @@ export interface NewsItem {
   summary: string;
   url: string;
   category: string;
-}
-
-export interface CandleData {
-  time: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
+  image?: string | null;
 }
 
 export interface SectorPerformance {
