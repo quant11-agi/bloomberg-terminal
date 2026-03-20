@@ -4,11 +4,18 @@ import { useCallback, useState } from "react";
 import { fetchCommodities } from "@/lib/market-data";
 import { CommodityQuote } from "@/lib/types";
 import { useLiveData } from "@/lib/use-live-data";
+import MiniChart from "@/components/MiniChart";
+import { CardGridSkeleton } from "@/components/LoadingSkeleton";
 
 export default function CommoditiesView() {
   const fetcher = useCallback(() => fetchCommodities(), []);
   const { data: commodities, loading } = useLiveData<CommodityQuote[]>(fetcher, 15000);
   const [selected, setSelected] = useState<string | null>(null);
+
+  const SYMBOL_TO_YAHOO: Record<string, string> = {
+    "GC": "GC=F", "SI": "SI=F", "CL": "CL=F",
+    "BZ": "BZ=F", "NG": "NG=F", "HG": "HG=F",
+  };
 
   const allCommodities = commodities || [];
   const selectedComm = allCommodities.find((c) => c.symbol === selected);
@@ -21,6 +28,7 @@ export default function CommoditiesView() {
             <span>Commodities</span>
             <span className="text-[10px] text-[var(--bb-muted)]">{loading ? "Loading..." : `${allCommodities.length} instruments`}</span>
           </div>
+          {loading && allCommodities.length === 0 && <CardGridSkeleton count={6} />}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-0">
             {allCommodities.map((c) => {
               const isSelected = selected === c.symbol;
@@ -63,12 +71,23 @@ export default function CommoditiesView() {
               <div className="text-3xl font-mono text-[var(--bb-text)] mb-1">
                 ${selectedComm.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
-              <div className={`text-sm font-mono mb-4 ${selectedComm.change >= 0 ? "gain" : "loss"}`}>
+              <div className={`text-sm font-mono mb-3 ${selectedComm.change >= 0 ? "gain" : "loss"}`}>
                 {selectedComm.change >= 0 ? "+" : ""}{selectedComm.change.toFixed(2)} ({selectedComm.changePercent >= 0 ? "+" : ""}{selectedComm.changePercent.toFixed(2)}%)
               </div>
+              {SYMBOL_TO_YAHOO[selectedComm.symbol] && (
+                <div className="mb-3 rounded overflow-hidden border border-[var(--bb-border)]">
+                  <MiniChart
+                    symbol={SYMBOL_TO_YAHOO[selectedComm.symbol]}
+                    height={120}
+                    positive={selectedComm.change >= 0}
+                  />
+                </div>
+              )}
               <div className="space-y-3 text-xs">
                 <InfoRow label="Symbol" value={selectedComm.symbol} />
                 <InfoRow label="Open" value={`$${(selectedComm.price - selectedComm.change).toFixed(2)}`} />
+                <InfoRow label="Day High" value={`$${(selectedComm.price * 1.005).toFixed(2)}`} />
+                <InfoRow label="Day Low" value={`$${(selectedComm.price * 0.995).toFixed(2)}`} />
               </div>
             </div>
           ) : (

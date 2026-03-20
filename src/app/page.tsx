@@ -10,6 +10,33 @@ import CommoditiesView from "@/components/views/CommoditiesView";
 import NewsView from "@/components/views/NewsView";
 import WatchlistView from "@/components/views/WatchlistView";
 
+function MarketStatusIndicator() {
+  const [status, setStatus] = useState("");
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      const nyHour = Number(now.toLocaleString("en-US", { timeZone: "America/New_York", hour: "numeric", hour12: false }));
+      const nyMin = Number(now.toLocaleString("en-US", { timeZone: "America/New_York", minute: "numeric" }));
+      const day = Number(now.toLocaleString("en-US", { timeZone: "America/New_York", weekday: "narrow" }));
+      const nyDay = now.toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short" });
+      const isWeekend = nyDay === "Sat" || nyDay === "Sun";
+      const totalMin = nyHour * 60 + nyMin;
+      const isOpen = !isWeekend && totalMin >= 570 && totalMin < 960; // 9:30 AM - 4:00 PM ET
+      setStatus(isOpen ? "US Market Open" : "US Market Closed");
+    };
+    update();
+    const interval = setInterval(update, 30000);
+    return () => clearInterval(interval);
+  }, []);
+  const isOpen = status.includes("Open");
+  return (
+    <span className="flex items-center gap-1.5">
+      <span className={`w-1.5 h-1.5 rounded-full inline-block ${isOpen ? "bg-[var(--bb-green)] live-dot" : "bg-[var(--bb-red)]"}`} />
+      <span className={isOpen ? "text-[var(--bb-green)]" : "text-[var(--bb-red)]"}>{status}</span>
+    </span>
+  );
+}
+
 export type ViewType = "dashboard" | "equities" | "forex" | "commodities" | "news" | "watchlist";
 
 export default function Home() {
@@ -83,16 +110,20 @@ export default function Home() {
 
       <footer className="flex items-center justify-between px-4 py-1.5 bg-[#0a0a0a] border-t border-[var(--bb-border)] text-[10px] text-[var(--bb-muted)]">
         <div className="flex items-center gap-4">
-          <span>Data: Yahoo Finance (real-time)</span>
+          <span>Data: Yahoo Finance</span>
           <span>•</span>
           <span>Refresh: 15s</span>
           <span>•</span>
+          <MarketStatusIndicator />
+        </div>
+        <div className="flex items-center gap-4">
           <span className="text-[var(--bb-orange)]">/ Search</span>
           <span className="text-[var(--bb-orange)]">ESC Dashboard</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="live-dot w-1.5 h-1.5 rounded-full bg-[var(--bb-green)] inline-block" />
-          <span>Connected</span>
+          <span>•</span>
+          <div className="flex items-center gap-2">
+            <span className="live-dot w-1.5 h-1.5 rounded-full bg-[var(--bb-green)] inline-block" />
+            <span>Connected</span>
+          </div>
         </div>
       </footer>
     </div>

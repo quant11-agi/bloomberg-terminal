@@ -103,3 +103,19 @@ body {
 }
 .flash-gain { animation: flash-green 0.6s ease-out; }
 .flash-loss { animation: flash-red 0.6s ease-out; }
+
+/* Fade-in for view transitions */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+main > div {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(255, 140, 0, 0.3);
+  color: var(--bb-text);
+}

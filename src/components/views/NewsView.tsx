@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { fetchNews } from "@/lib/market-data";
 import { NewsItem } from "@/lib/types";
 import { useLiveData } from "@/lib/use-live-data";
+import { NewsSkeleton } from "@/components/LoadingSkeleton";
 
 const CATEGORIES = ["all", "technology", "economy", "markets", "commodities", "crypto"];
 
@@ -100,9 +101,7 @@ export default function NewsView() {
           ))}
         </div>
 
-        {loading && allNews.length === 0 && (
-          <div className="p-8 text-center text-[var(--bb-muted)] text-xs">Loading news...</div>
-        )}
+        {loading && allNews.length === 0 && <NewsSkeleton count={8} />}
         {!loading && filtered.length === 0 && (
           <div className="p-8 text-center text-[var(--bb-muted)] text-xs">No news in this category</div>
         )}

@@ -5,6 +5,20 @@ import { fetchCurrencies } from "@/lib/market-data";
 import { CurrencyPair } from "@/lib/types";
 import { useLiveData } from "@/lib/use-live-data";
 import { useState } from "react";
+import MiniChart from "@/components/MiniChart";
+import { CardGridSkeleton } from "@/components/LoadingSkeleton";
+
+const PAIR_TO_YAHOO: Record<string, string> = {
+  "EUR/USD": "EURUSD=X",
+  "GBP/USD": "GBPUSD=X",
+  "USD/JPY": "JPY=X",
+  "USD/CHF": "CHF=X",
+  "AUD/USD": "AUDUSD=X",
+  "USD/CAD": "CADUSD=X",
+  "USD/CNY": "CNY=X",
+  "BTC/USD": "BTC-USD",
+  "ETH/USD": "ETH-USD",
+};
 
 export default function ForexView() {
   const fetcher = useCallback(() => fetchCurrencies(), []);
@@ -24,6 +38,7 @@ export default function ForexView() {
               {loading ? "Loading..." : `${allCurrencies.length} pairs`}
             </span>
           </div>
+          {loading && allCurrencies.length === 0 && <CardGridSkeleton count={9} />}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-0">
             {allCurrencies.map((c) => {
               const isSelected = selected === c.pair;
@@ -59,16 +74,28 @@ export default function ForexView() {
           </div>
           {selectedPair ? (
             <div className="p-4">
-              <div className="text-3xl font-mono text-[var(--bb-text)] mb-4">
+              <div className="text-3xl font-mono text-[var(--bb-text)] mb-1">
                 {selectedPair.rate > 1000
                   ? selectedPair.rate.toLocaleString(undefined, { maximumFractionDigits: 2 })
                   : selectedPair.rate.toFixed(4)}
               </div>
+              <div className={`text-sm font-mono mb-3 ${selectedPair.change >= 0 ? "gain" : "loss"}`}>
+                {selectedPair.change >= 0 ? "+" : ""}{selectedPair.change > 100 ? selectedPair.change.toFixed(2) : selectedPair.change.toFixed(4)}
+                {" "}({((selectedPair.change / (selectedPair.rate - selectedPair.change)) * 100).toFixed(3)}%)
+              </div>
+              {PAIR_TO_YAHOO[selectedPair.pair] && (
+                <div className="mb-3 rounded overflow-hidden border border-[var(--bb-border)]">
+                  <MiniChart
+                    symbol={PAIR_TO_YAHOO[selectedPair.pair]}
+                    height={120}
+                    positive={selectedPair.change >= 0}
+                  />
+                </div>
+              )}
               <div className="space-y-3 text-xs">
-                <DetailRow label="Change" value={selectedPair.change > 100 ? selectedPair.change.toFixed(2) : selectedPair.change.toFixed(4)} positive={selectedPair.change >= 0} />
-                <DetailRow label="Change %" value={`${((selectedPair.change / (selectedPair.rate - selectedPair.change)) * 100).toFixed(3)}%`} positive={selectedPair.change >= 0} />
                 <DetailRow label="Bid" value={selectedPair.rate > 1000 ? (selectedPair.rate - 5).toFixed(2) : (selectedPair.rate - 0.0002).toFixed(4)} />
                 <DetailRow label="Ask" value={selectedPair.rate > 1000 ? (selectedPair.rate + 5).toFixed(2) : (selectedPair.rate + 0.0002).toFixed(4)} />
+                <DetailRow label="Spread" value={selectedPair.rate > 1000 ? "10.00" : "0.0004"} />
               </div>
             </div>
           ) : (

@@ -5,6 +5,7 @@ import { fetchNews } from "@/lib/market-data";
 import { NewsItem } from "@/lib/types";
 import { useLiveData } from "@/lib/use-live-data";
 import { useState } from "react";
+import { NewsSkeleton } from "@/components/LoadingSkeleton";
 
 function timeAgo(timestamp: number): string {
   const seconds = Math.floor((Date.now() - timestamp) / 1000);
@@ -86,9 +87,7 @@ export default function NewsFeed({ compact, onViewAll }: Props) {
             )}
           </div>
         ))}
-        {loading && allNews.length === 0 && (
-          <div className="p-4 text-center text-[var(--bb-muted)] text-xs">Loading news...</div>
-        )}
+        {loading && allNews.length === 0 && <NewsSkeleton count={6} />}
         {compact && allNews.length > 8 && onViewAll && (
           <button onClick={onViewAll}
             className="w-full py-2 text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] hover:bg-[#1a1a1a] transition-colors">
