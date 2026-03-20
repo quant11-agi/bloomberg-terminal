@@ -69,22 +69,22 @@ export default function StockTable({
       </div>
       <div className={`overflow-auto ${expanded ? "max-h-[800px]" : "max-h-[600px]"}`}>
         <table className="w-full text-xs">
-          <thead className="sticky top-0 bg-[#1a1a1a] z-10">
+          <thead className="sticky top-0 bg-[#1a1a2e] z-10">
             <tr className="text-[var(--bb-muted)] border-b border-[var(--bb-border)]">
-              {toggleWatchlist && <th className="py-2 px-2 w-6" />}
-              <th className="text-left py-2 px-3 font-medium cursor-pointer hover:text-[var(--bb-orange)]" onClick={() => handleSort("symbol")}>
+              {toggleWatchlist && <th className="py-1 px-1 w-6" />}
+              <th className="text-left py-1 px-2 font-medium cursor-pointer hover:text-[var(--bb-orange)]" onClick={() => handleSort("symbol")}>
                 Symbol{arrow("symbol")}
               </th>
-              <th className="text-right py-2 px-3 font-medium">Last</th>
-              <th className="text-right py-2 px-3 font-medium">Chg</th>
-              <th className="text-right py-2 px-3 font-medium cursor-pointer hover:text-[var(--bb-orange)]" onClick={() => handleSort("changePercent")}>
+              <th className="text-right py-1 px-2 font-medium">Last</th>
+              <th className="text-right py-1 px-2 font-medium">Chg</th>
+              <th className="text-right py-1 px-2 font-medium cursor-pointer hover:text-[var(--bb-orange)]" onClick={() => handleSort("changePercent")}>
                 % Chg{arrow("changePercent")}
               </th>
-              <th className="text-right py-2 px-3 font-medium cursor-pointer hover:text-[var(--bb-orange)]" onClick={() => handleSort("volume")}>
+              <th className="text-right py-1 px-2 font-medium cursor-pointer hover:text-[var(--bb-orange)]" onClick={() => handleSort("volume")}>
                 Volume{arrow("volume")}
               </th>
-              <th className="text-right py-2 px-3 font-medium hidden lg:table-cell">High</th>
-              <th className="text-right py-2 px-3 font-medium hidden lg:table-cell">Low</th>
+              <th className="text-right py-1 px-2 font-medium hidden lg:table-cell">High</th>
+              <th className="text-right py-1 px-2 font-medium hidden lg:table-cell">Low</th>
             </tr>
           </thead>
           <tbody>
@@ -93,35 +93,35 @@ export default function StockTable({
               const flashClass = prev ? (stock.price > prev ? "flash-gain" : stock.price < prev ? "flash-loss" : "") : "";
               const isWatched = watchlist.includes(stock.symbol);
               return (
-                <tr key={stock.symbol} className={`border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors ${flashClass}`} onClick={() => onSelectSymbol(stock.symbol)}>
+                <tr key={stock.symbol} className={`border-b border-[var(--bb-border)] hover:bg-[#1a1a2e] cursor-pointer transition-colors ${flashClass}`} onClick={() => onSelectSymbol(stock.symbol)}>
                   {toggleWatchlist && (
-                    <td className="py-2 px-2">
+                    <td className="py-1 px-1">
                       <button onClick={(e) => { e.stopPropagation(); toggleWatchlist(stock.symbol); }}
                         className={`transition-colors ${isWatched ? "text-[var(--bb-orange)]" : "text-[var(--bb-border)] hover:text-[var(--bb-orange)]"}`}>
                         {isWatched ? "★" : "☆"}
                       </button>
                     </td>
                   )}
-                  <td className="py-2 px-3">
+                  <td className="py-1 px-2">
                     <div className="font-bold text-[var(--bb-blue)]">{stock.symbol}</div>
                     <div className="text-[10px] text-[var(--bb-muted)]">{stock.name}</div>
                   </td>
-                  <td className="text-right py-2 px-3 font-mono">{stock.price.toFixed(2)}</td>
-                  <td className={`text-right py-2 px-3 font-mono ${stock.change >= 0 ? "gain" : "loss"}`}>
+                  <td className="text-right py-1 px-2 font-mono">{stock.price.toFixed(2)}</td>
+                  <td className={`text-right py-1 px-2 font-mono ${stock.change >= 0 ? "gain" : "loss"}`}>
                     {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}
                   </td>
-                  <td className="text-right py-2 px-3">
+                  <td className="text-right py-1 px-2">
                     <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
                       stock.changePercent >= 0 ? "bg-[rgba(0,210,106,0.15)] text-[var(--bb-green)]" : "bg-[rgba(255,59,59,0.15)] text-[var(--bb-red)]"
                     }`}>
                       {stock.changePercent >= 0 ? "+" : ""}{stock.changePercent.toFixed(2)}%
                     </span>
                   </td>
-                  <td className="text-right py-2 px-3 font-mono text-[var(--bb-muted)]">
+                  <td className="text-right py-1 px-2 font-mono text-[var(--bb-muted)]">
                     {stock.volume > 0 ? (stock.volume / 1e6).toFixed(1) + "M" : "—"}
                   </td>
-                  <td className="text-right py-2 px-3 font-mono hidden lg:table-cell">{stock.high > 0 ? stock.high.toFixed(2) : "—"}</td>
-                  <td className="text-right py-2 px-3 font-mono hidden lg:table-cell">{stock.low > 0 ? stock.low.toFixed(2) : "—"}</td>
+                  <td className="text-right py-1 px-2 font-mono hidden lg:table-cell">{stock.high > 0 ? stock.high.toFixed(2) : "—"}</td>
+                  <td className="text-right py-1 px-2 font-mono hidden lg:table-cell">{stock.low > 0 ? stock.low.toFixed(2) : "—"}</td>
                 </tr>
               );
             })}

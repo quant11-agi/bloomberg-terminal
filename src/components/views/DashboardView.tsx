@@ -9,6 +9,7 @@ import ForexPanel from "@/components/ForexPanel";
 import CommoditiesPanel from "@/components/CommoditiesPanel";
 import SectorHeatmap from "@/components/SectorHeatmap";
 import MarketMovers from "@/components/MarketMovers";
+import TreasuryYields from "@/components/TreasuryYields";
 
 interface Props {
   selectedSymbol: string;
@@ -28,10 +29,11 @@ export default function DashboardView({
   setActiveView,
 }: Props) {
   return (
-    <div className="p-2 gap-2 grid grid-cols-1 lg:grid-cols-12 auto-rows-min">
+    <div className="p-1 gap-1 grid grid-cols-1 lg:grid-cols-12 auto-rows-min">
       {/* Left column */}
       <div className="lg:col-span-3 flex flex-col gap-2">
         <MarketOverview />
+        <TreasuryYields />
         <ForexPanel onViewAll={() => setActiveView("forex")} />
         <CommoditiesPanel onViewAll={() => setActiveView("commodities")} />
       </div>

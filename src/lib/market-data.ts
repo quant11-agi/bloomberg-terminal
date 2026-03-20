@@ -201,6 +201,12 @@ export async function fetchQuote(symbol: string): Promise<StockQuote | null> {
         open: q.open,
         prevClose: q.prevClose,
         marketCap: q.marketCap,
+        fiftyTwoWeekHigh: q.fiftyTwoWeekHigh,
+        fiftyTwoWeekLow: q.fiftyTwoWeekLow,
+        trailingPE: q.trailingPE,
+        epsTrailingTwelveMonths: q.epsTrailingTwelveMonths,
+        dividendYield: q.dividendYield,
+        avgVolume: q.avgVolume,
       };
     }
     return null;

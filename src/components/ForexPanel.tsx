@@ -34,7 +34,7 @@ export default function ForexPanel({ onViewAll }: Props) {
           </thead>
           <tbody>
             {(currencies || []).map((c) => (
-              <tr key={c.pair} className="border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors" onClick={onViewAll}>
+              <tr key={c.pair} className="border-b border-[var(--bb-border)] hover:bg-[#1a1a2e] cursor-pointer transition-colors" onClick={onViewAll}>
                 <td className="py-2 px-3 font-bold text-[var(--bb-yellow)]">{c.pair}</td>
                 <td className="text-right py-2 px-3 font-mono">
                   {c.rate > 1000 ? c.rate.toLocaleString(undefined, { maximumFractionDigits: 2 }) : c.rate.toFixed(4)}

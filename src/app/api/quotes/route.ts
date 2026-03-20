@@ -67,6 +67,12 @@ export async function GET(request: Request) {
       exchange: q.exchange || "",
       quoteType: q.quoteType || "",
       currency: q.currency || "USD",
+      fiftyTwoWeekHigh: q.fiftyTwoWeekHigh ?? 0,
+      fiftyTwoWeekLow: q.fiftyTwoWeekLow ?? 0,
+      trailingPE: q.trailingPE ?? 0,
+      epsTrailingTwelveMonths: q.epsTrailingTwelveMonths ?? 0,
+      dividendYield: q.dividendYield ?? 0,
+      avgVolume: q.averageDailyVolume10Day ?? 0,
     }));
 
     return NextResponse.json(quotes, {

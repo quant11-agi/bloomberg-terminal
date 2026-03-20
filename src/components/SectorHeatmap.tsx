@@ -18,7 +18,7 @@ export default function SectorHeatmap() {
         <span>Sector Performance</span>
         {loading && !(sectors?.length) && <span className="text-[10px] text-[var(--bb-muted)]">Loading...</span>}
       </div>
-      <div className="p-3 grid grid-cols-2 gap-1.5">
+      <div className="p-1.5 grid grid-cols-2 gap-1">
         {sorted.map((sector) => {
           const intensity = Math.min(Math.abs(sector.changePercent) / maxAbs, 1);
           const bg = sector.changePercent >= 0

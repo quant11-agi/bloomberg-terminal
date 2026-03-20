@@ -6,6 +6,7 @@ import { fetchChart, fetchQuote } from "@/lib/market-data";
 import { StockQuote } from "@/lib/types";
 
 const TIMEFRAMES = [
+  { label: "1D", range: "1d" },
   { label: "1W", range: "5d" },
   { label: "1M", range: "1mo" },
   { label: "3M", range: "3mo" },
@@ -17,7 +18,7 @@ export default function Chart({ symbol }: { symbol: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
   const [stock, setStock] = useState<StockQuote | null>(null);
-  const [activeTf, setActiveTf] = useState(2);
+  const [activeTf, setActiveTf] = useState(3);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [candleCount, setCandleCount] = useState(0);
@@ -44,21 +45,21 @@ export default function Chart({ symbol }: { symbol: string }) {
 
     const chart = createChart(containerRef.current, {
       layout: {
-        background: { type: ColorType.Solid, color: "#111111" },
-        textColor: "#888888",
+        background: { type: ColorType.Solid, color: "#12121c" },
+        textColor: "#7a8a9a",
         fontFamily: "Consolas, Monaco, monospace",
         fontSize: 11,
       },
       grid: {
-        vertLines: { color: "#1a1a1a" },
-        horzLines: { color: "#1a1a1a" },
+        vertLines: { color: "#1e2a3a" },
+        horzLines: { color: "#1e2a3a" },
       },
       crosshair: {
-        vertLine: { color: "#ff8c00", width: 1, style: 2 },
-        horzLine: { color: "#ff8c00", width: 1, style: 2 },
+        vertLine: { color: "#ff9e2c", width: 1, style: 2 },
+        horzLine: { color: "#ff9e2c", width: 1, style: 2 },
       },
-      timeScale: { borderColor: "#2a2a2a", timeVisible: false },
-      rightPriceScale: { borderColor: "#2a2a2a" },
+      timeScale: { borderColor: "#1e2a3a", timeVisible: false },
+      rightPriceScale: { borderColor: "#1e2a3a" },
       width: containerRef.current.clientWidth,
       height: 350,
     });
@@ -166,7 +167,7 @@ export default function Chart({ symbol }: { symbol: string }) {
         <div ref={containerRef} className="w-full" />
         {/* Loading overlay */}
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#111111] bg-opacity-80">
+          <div className="absolute inset-0 flex items-center justify-center bg-[#12121c] bg-opacity-80">
             <div className="text-center">
               <div className="text-[var(--bb-orange)] text-xs mb-1">Loading chart...</div>
               <div className="text-[var(--bb-muted)] text-[10px]">{symbol} · {TIMEFRAMES[activeTf].label}</div>
@@ -175,7 +176,7 @@ export default function Chart({ symbol }: { symbol: string }) {
         )}
         {/* Error state */}
         {error && !loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#111111]" style={{ minHeight: 200 }}>
+          <div className="absolute inset-0 flex items-center justify-center bg-[#12121c]" style={{ minHeight: 200 }}>
             <div className="text-center">
               <div className="text-[var(--bb-red)] text-xs mb-1">No chart data available</div>
               <div className="text-[var(--bb-muted)] text-[10px] mb-2">

@@ -36,7 +36,7 @@ export default function WatchlistView({ selectedSymbol, setSelectedSymbol, watch
   }
 
   return (
-    <div className="p-2 gap-2 grid grid-cols-1 lg:grid-cols-12">
+    <div className="p-1 gap-1 grid grid-cols-1 lg:grid-cols-12">
       <div className="lg:col-span-5">
         <div className="panel">
           <div className="panel-header">
@@ -47,7 +47,7 @@ export default function WatchlistView({ selectedSymbol, setSelectedSymbol, watch
             {watchedStocks.map((stock) => (
               <div key={stock.symbol}
                 className={`flex items-center justify-between px-3 py-3 cursor-pointer transition-colors ${
-                  selectedSymbol === stock.symbol ? "bg-[#1a1a1a]" : "hover:bg-[#141414]"
+                  selectedSymbol === stock.symbol ? "bg-[#1a1a2e]" : "hover:bg-[#161622]"
                 }`}
                 onClick={() => setSelectedSymbol(stock.symbol)}>
                 <div className="flex items-center gap-3">

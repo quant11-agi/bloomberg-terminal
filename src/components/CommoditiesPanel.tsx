@@ -34,7 +34,7 @@ export default function CommoditiesPanel({ onViewAll }: Props) {
           </thead>
           <tbody>
             {(commodities || []).map((c) => (
-              <tr key={c.symbol} className="border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors" onClick={onViewAll}>
+              <tr key={c.symbol} className="border-b border-[var(--bb-border)] hover:bg-[#1a1a2e] cursor-pointer transition-colors" onClick={onViewAll}>
                 <td className="py-2 px-3"><span className="font-bold text-[var(--bb-text)]">{c.name}</span></td>
                 <td className="text-right py-2 px-3 font-mono">
                   {c.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

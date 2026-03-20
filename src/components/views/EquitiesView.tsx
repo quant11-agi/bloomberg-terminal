@@ -21,7 +21,7 @@ export default function EquitiesView({
   toggleWatchlist,
 }: Props) {
   return (
-    <div className="p-2 gap-2 grid grid-cols-1 lg:grid-cols-12 auto-rows-min">
+    <div className="p-1 gap-1 grid grid-cols-1 lg:grid-cols-12 auto-rows-min">
       {/* Left: full stock table */}
       <div className="lg:col-span-5 flex flex-col gap-2">
         <StockTable

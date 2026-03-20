@@ -21,7 +21,7 @@ export default function CommoditiesView() {
   const selectedComm = allCommodities.find((c) => c.symbol === selected);
 
   return (
-    <div className="p-2 gap-2 grid grid-cols-1 lg:grid-cols-12">
+    <div className="p-1 gap-1 grid grid-cols-1 lg:grid-cols-12">
       <div className="lg:col-span-8">
         <div className="panel">
           <div className="panel-header">
@@ -35,7 +35,7 @@ export default function CommoditiesView() {
               return (
                 <div key={c.symbol} onClick={() => setSelected(isSelected ? null : c.symbol)}
                   className={`p-4 border border-[var(--bb-border)] cursor-pointer transition-colors ${
-                    isSelected ? "bg-[#1a1a1a] border-[var(--bb-orange)]" : "hover:bg-[#141414]"
+                    isSelected ? "bg-[#1a1a2e] border-[var(--bb-orange)]" : "hover:bg-[#161622]"
                   }`}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-sm text-[var(--bb-text)]">{c.name}</span>

@@ -25,13 +25,13 @@ export default function MiniChart({ symbol, height = 150, positive = true }: Pro
     const chart = createChart(containerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#888888",
+        textColor: "#7a8a9a",
         fontFamily: "Consolas, Monaco, monospace",
         fontSize: 9,
       },
       grid: {
         vertLines: { visible: false },
-        horzLines: { color: "#1a1a1a" },
+        horzLines: { color: "#1e2a3a" },
       },
       crosshair: {
         vertLine: { visible: false },

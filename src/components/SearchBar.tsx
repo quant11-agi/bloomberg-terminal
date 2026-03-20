@@ -101,8 +101,8 @@ export default function SearchBar({ onSelectSymbol, onQueryChange }: Props) {
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        placeholder="Search symbols... ( / )"
-        className="bg-[#1a1a1a] border border-[var(--bb-border)] rounded px-3 py-1 text-xs text-[var(--bb-text)] w-64 focus:border-[var(--bb-orange)] focus:outline-none placeholder:text-[var(--bb-muted)] font-mono"
+        placeholder="> Search symbols... ( / )"
+        className="bg-[#1a1a2e] border border-[var(--bb-border)] rounded px-3 py-1 text-xs text-[var(--bb-text)] w-80 focus:border-[var(--bb-orange)] focus:outline-none placeholder:text-[var(--bb-muted)] font-mono"
       />
       {query && (
         <button onClick={() => { setQuery(""); setResults([]); setIsOpen(false); }}
@@ -120,7 +120,7 @@ export default function SearchBar({ onSelectSymbol, onQueryChange }: Props) {
           {results.map((result, i) => (
             <div key={result.symbol}
               className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-colors ${
-                i === selectedIndex ? "bg-[#1a1a1a]" : "hover:bg-[#141414]"
+                i === selectedIndex ? "bg-[#1a1a2e]" : "hover:bg-[#161622]"
               }`}
               onClick={() => selectResult(result)}
               onMouseEnter={() => setSelectedIndex(i)}>

@@ -16,8 +16,8 @@ export function PanelSkeleton({ rows = 5, title }: { rows?: number; title?: stri
       <div className="p-3 space-y-2">
         {Array.from({ length: rows }).map((_, i) => (
           <div key={i} className="flex items-center justify-between">
-            <div className="h-3 bg-[#1a1a1a] rounded animate-pulse" style={{ width: `${ROW_WIDTHS[i % ROW_WIDTHS.length]}%` }} />
-            <div className="h-3 bg-[#1a1a1a] rounded animate-pulse" style={{ width: `${20 + (i * 3) % 15}%` }} />
+            <div className="h-3 bg-[#1a1a2e] rounded animate-pulse" style={{ width: `${ROW_WIDTHS[i % ROW_WIDTHS.length]}%` }} />
+            <div className="h-3 bg-[#1a1a2e] rounded animate-pulse" style={{ width: `${20 + (i * 3) % 15}%` }} />
           </div>
         ))}
       </div>
@@ -30,7 +30,7 @@ export function TableRowSkeleton({ cols = 4 }: { cols?: number }) {
     <tr className="border-b border-[var(--bb-border)]">
       {Array.from({ length: cols }).map((_, i) => (
         <td key={i} className="py-2 px-3">
-          <div className="h-3 bg-[#1a1a1a] rounded animate-pulse" style={{ width: `${CELL_WIDTHS[i % CELL_WIDTHS.length]}%` }} />
+          <div className="h-3 bg-[#1a1a2e] rounded animate-pulse" style={{ width: `${CELL_WIDTHS[i % CELL_WIDTHS.length]}%` }} />
         </td>
       ))}
     </tr>
@@ -43,11 +43,11 @@ export function CardGridSkeleton({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="p-4 border border-[var(--bb-border)]">
           <div className="flex items-center justify-between mb-2">
-            <div className="h-3.5 bg-[#1a1a1a] rounded animate-pulse" style={{ width: `${ROW_WIDTHS[i % ROW_WIDTHS.length]}%` }} />
-            <div className="h-3 bg-[#1a1a1a] rounded animate-pulse w-12" />
+            <div className="h-3.5 bg-[#1a1a2e] rounded animate-pulse" style={{ width: `${ROW_WIDTHS[i % ROW_WIDTHS.length]}%` }} />
+            <div className="h-3 bg-[#1a1a2e] rounded animate-pulse w-12" />
           </div>
-          <div className="h-6 bg-[#1a1a1a] rounded animate-pulse w-24 mb-2" />
-          <div className="h-3 bg-[#1a1a1a] rounded animate-pulse w-16" />
+          <div className="h-6 bg-[#1a1a2e] rounded animate-pulse w-24 mb-2" />
+          <div className="h-3 bg-[#1a1a2e] rounded animate-pulse w-16" />
         </div>
       ))}
     </div>
@@ -59,11 +59,11 @@ export function NewsSkeleton({ count = 5 }: { count?: number }) {
     <div>
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="px-3 py-2.5 border-b border-[var(--bb-border)]">
-          <div className="h-3.5 bg-[#1a1a1a] rounded animate-pulse mb-1.5" style={{ width: `${ROW_WIDTHS[i % ROW_WIDTHS.length] + 20}%` }} />
+          <div className="h-3.5 bg-[#1a1a2e] rounded animate-pulse mb-1.5" style={{ width: `${ROW_WIDTHS[i % ROW_WIDTHS.length] + 20}%` }} />
           <div className="flex items-center gap-2 mt-1">
-            <div className="h-2.5 bg-[#1a1a1a] rounded animate-pulse w-14" />
-            <div className="h-2.5 bg-[#1a1a1a] rounded animate-pulse w-10" />
-            <div className="h-2.5 bg-[#1a1a1a] rounded animate-pulse w-8" />
+            <div className="h-2.5 bg-[#1a1a2e] rounded animate-pulse w-14" />
+            <div className="h-2.5 bg-[#1a1a2e] rounded animate-pulse w-10" />
+            <div className="h-2.5 bg-[#1a1a2e] rounded animate-pulse w-8" />
           </div>
         </div>
       ))}

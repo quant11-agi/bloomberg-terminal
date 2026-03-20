@@ -32,10 +32,10 @@ export default function MarketOverview() {
         <table className="w-full text-xs">
           <thead>
             <tr className="text-[var(--bb-muted)] border-b border-[var(--bb-border)]">
-              <th className="text-left py-2 px-3 font-medium">Index</th>
-              <th className="text-right py-2 px-3 font-medium">Last</th>
-              <th className="text-right py-2 px-3 font-medium">Chg</th>
-              <th className="text-right py-2 px-3 font-medium">% Chg</th>
+              <th className="text-left py-1 px-2 font-medium">Index</th>
+              <th className="text-right py-1 px-2 font-medium">Last</th>
+              <th className="text-right py-1 px-2 font-medium">Chg</th>
+              <th className="text-right py-1 px-2 font-medium">% Chg</th>
             </tr>
           </thead>
           <tbody>
@@ -45,18 +45,18 @@ export default function MarketOverview() {
                 ? idx.price > prev ? "flash-gain" : idx.price < prev ? "flash-loss" : ""
                 : "";
               return (
-                <tr key={idx.symbol} className={`border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] ${flashClass}`}>
-                  <td className="py-2 px-3">
+                <tr key={idx.symbol} className={`border-b border-[var(--bb-border)] hover:bg-[#1a1a2e] ${flashClass}`}>
+                  <td className="py-1 px-2">
                     <div className="font-bold text-[var(--bb-orange)]">{idx.symbol}</div>
                     <div className="text-[10px] text-[var(--bb-muted)]">{idx.name}</div>
                   </td>
-                  <td className="text-right py-2 px-3 font-mono">
+                  <td className="text-right py-1 px-2 font-mono">
                     {idx.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td className={`text-right py-2 px-3 font-mono ${idx.change >= 0 ? "gain" : "loss"}`}>
+                  <td className={`text-right py-1 px-2 font-mono ${idx.change >= 0 ? "gain" : "loss"}`}>
                     {idx.change >= 0 ? "+" : ""}{idx.change.toFixed(2)}
                   </td>
-                  <td className="text-right py-2 px-3">
+                  <td className="text-right py-1 px-2">
                     <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
                       idx.changePercent >= 0
                         ? "bg-[rgba(0,210,106,0.15)] text-[var(--bb-green)]"

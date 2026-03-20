@@ -63,11 +63,11 @@ export default function NewsView() {
 
         <div className="divide-y divide-[var(--bb-border)]">
           {filtered.map((item) => (
-            <div key={item.id} className="px-4 py-4 hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+            <div key={item.id} className="px-4 py-4 hover:bg-[#1a1a2e] cursor-pointer transition-colors"
               onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}>
               <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 mt-1">
-                  <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${CATEGORY_COLORS[item.category] || CATEGORY_COLORS.general} bg-[#1a1a1a]`}>
+                  <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${CATEGORY_COLORS[item.category] || CATEGORY_COLORS.general} bg-[#1a1a2e]`}>
                     {item.category}
                   </span>
                 </div>

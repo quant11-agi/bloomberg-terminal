@@ -23,7 +23,7 @@ export default function MarketMovers({ onSelectSymbol }: Props) {
       <h3 className={`text-[10px] uppercase tracking-wider font-bold mb-2 ${color}`}>{title}</h3>
       {items.map((s) => (
         <div key={s.symbol}
-          className={`flex items-center justify-between py-1 text-xs border-b border-[var(--bb-border)] ${onSelectSymbol ? "cursor-pointer hover:bg-[#1a1a1a]" : ""} transition-colors`}
+          className={`flex items-center justify-between py-1 text-xs border-b border-[var(--bb-border)] ${onSelectSymbol ? "cursor-pointer hover:bg-[#1a1a2e]" : ""} transition-colors`}
           onClick={() => onSelectSymbol?.(s.symbol)}>
           <span className="font-bold text-[var(--bb-blue)]">{s.symbol}</span>
           <span className="font-mono">{s.price.toFixed(2)}</span>
@@ -38,7 +38,7 @@ export default function MarketMovers({ onSelectSymbol }: Props) {
   return (
     <div className="panel">
       <div className="panel-header"><span>Market Movers</span></div>
-      <div className="p-3 grid grid-cols-3 gap-4">
+      <div className="p-2 grid grid-cols-3 gap-2">
         <MoverList title="Top Gainers" items={gainers} color="text-[var(--bb-green)]" />
         <MoverList title="Top Losers" items={losers} color="text-[var(--bb-red)]" />
         <MoverList title="Most Active" items={mostActive} color="text-[var(--bb-yellow)]" />

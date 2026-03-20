@@ -53,13 +53,19 @@ export default function StockDetail({ symbol, isWatchlisted, toggleWatchlist }: 
           <Stat label="Volume" value={formatVolume(stock.volume)} />
           <Stat label="Prev Close" value={stock.prevClose ? stock.prevClose.toFixed(2) : "—"} />
           <Stat label="Mkt Cap" value={stock.marketCap ? formatMarketCap(stock.marketCap) : "—"} />
+          <Stat label="52W High" value={stock.fiftyTwoWeekHigh ? stock.fiftyTwoWeekHigh.toFixed(2) : "—"} />
+          <Stat label="52W Low" value={stock.fiftyTwoWeekLow ? stock.fiftyTwoWeekLow.toFixed(2) : "—"} />
+          <Stat label="P/E" value={stock.trailingPE ? stock.trailingPE.toFixed(2) : "—"} />
+          <Stat label="EPS" value={stock.epsTrailingTwelveMonths ? stock.epsTrailingTwelveMonths.toFixed(2) : "—"} />
+          <Stat label="Div Yield" value={stock.dividendYield ? (stock.dividendYield * 100).toFixed(2) + "%" : "—"} />
+          <Stat label="Avg Vol" value={stock.avgVolume ? formatVolume(stock.avgVolume) : "—"} />
           <Stat label="Day Range" value={stock.low > 0 && stock.high > 0 ? `${stock.low.toFixed(2)} - ${stock.high.toFixed(2)}` : "—"} />
         </div>
         {/* Price range bar */}
         {stock.low > 0 && stock.high > 0 && stock.high > stock.low && (
           <div className="mt-3">
             <div className="text-[10px] text-[var(--bb-muted)] mb-1">Day Range</div>
-            <div className="relative h-2 bg-[#1a1a1a] rounded-full">
+            <div className="relative h-2 bg-[#1a1a2e] rounded-full">
               <div className="absolute top-0 h-full bg-gradient-to-r from-[var(--bb-red)] via-[var(--bb-yellow)] to-[var(--bb-green)] rounded-full opacity-30" style={{ left: "0%", width: "100%" }} />
               <div className="absolute top-[-2px] w-2 h-2 bg-[var(--bb-orange)] rounded-full border border-[var(--bb-dark)]"
                 style={{ left: `${((stock.price - stock.low) / (stock.high - stock.low)) * 100}%` }} />

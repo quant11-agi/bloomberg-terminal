@@ -60,7 +60,7 @@ export default function NewsFeed({ compact, onViewAll }: Props) {
       <div className={`overflow-auto ${compact ? "max-h-[500px]" : "max-h-[600px]"}`}>
         {displayNews.map((item) => (
           <div key={item.id}
-            className="px-3 py-2.5 border-b border-[var(--bb-border)] hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+            className="px-2 py-1.5 border-b border-[var(--bb-border)] hover:bg-[#1a1a2e] cursor-pointer transition-colors"
             onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}>
             <h3 className="text-xs font-semibold leading-snug text-[var(--bb-text)]">{item.headline}</h3>
             <div className="flex items-center gap-2 mt-1">
@@ -90,7 +90,7 @@ export default function NewsFeed({ compact, onViewAll }: Props) {
         {loading && allNews.length === 0 && <NewsSkeleton count={6} />}
         {compact && allNews.length > 8 && onViewAll && (
           <button onClick={onViewAll}
-            className="w-full py-2 text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] hover:bg-[#1a1a1a] transition-colors">
+            className="w-full py-2 text-[10px] text-[var(--bb-blue)] hover:text-[var(--bb-orange)] hover:bg-[#1a1a2e] transition-colors">
             + {allNews.length - 8} more stories →
           </button>
         )}

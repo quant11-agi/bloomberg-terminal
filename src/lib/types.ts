@@ -18,6 +18,12 @@ export interface StockQuote {
   open: number;
   prevClose?: number;
   marketCap?: number;
+  fiftyTwoWeekHigh?: number;
+  fiftyTwoWeekLow?: number;
+  trailingPE?: number;
+  epsTrailingTwelveMonths?: number;
+  dividendYield?: number;
+  avgVolume?: number;
 }
 
 export interface NewsItem {
