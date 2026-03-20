@@ -10,6 +10,8 @@ function decodeEntities(text: string): string {
     .replace(/&apos;/g, "'")
     .replace(/&#39;/g, "'")
     .replace(/&#x27;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
 }
 
